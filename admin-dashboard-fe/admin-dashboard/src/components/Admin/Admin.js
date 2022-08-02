@@ -1,5 +1,5 @@
-import React from "react";
-import BookingTable from "../../common/components/BookingTabe/BookingTable";
+import React, { useState, useRef } from "react";
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import "../../common/common.css";
 import TextField from "@mui/material/TextField";
@@ -8,9 +8,14 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import AdminTable from "../../common/components/Tables/AdminTable";
+import emailjs from "emailjs-com";
 
 const Admin = () => {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [email, setEmail] = useState("");
+
+  const form = useRef();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -18,6 +23,21 @@ const Admin = () => {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleSend = () => {
+    console.log(email);
+    emailjs
+      .sendForm(
+        "service_1bdx64m",
+        "template_jzry1ui",
+        form.current,
+        "nUK50uZ1kc7Hjlash"
+      )
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => console.log(err));
   };
 
   return (
@@ -72,27 +92,28 @@ const Admin = () => {
           </li>
         </ul>
 
-        <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content-wrapper" className="d-flex flex-column">
           <div id="content">
-            <nav class="navbar navbar-expand navbar-light bg-navbar topbar mb-4 static-top">
+            <nav className="navbar navbar-expand navbar-light bg-navbar topbar mb-4 static-top">
               <button
                 id="sidebarToggleTop"
-                class="btn btn-link rounded-circle mr-3"
+                className="btn btn-link rounded-circle mr-3"
               >
-                <i class="fa fa-bars"></i>
+                <i className="fa fa-bars"></i>
               </button>
             </nav>
 
-            <div class="container-fluid" id="container-wrapper">
-              <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                <h1 class="h3 mb-0 text-gray-800">Admin</h1>
+            <div className="container-fluid" id="container-wrapper">
+              <div className="d-sm-flex align-items-center justify-content-between mb-4">
+                <h1 className="h3 mb-0 text-gray-800">Admin</h1>
               </div>
-              <div class="d-sm-flex align-items-center justify-content-between mb-4">
+              <div className="d-sm-flex align-items-center justify-content-between mb-4">
                 <Button variant="contained" onClick={handleClickOpen}>
                   Add Admin
                 </Button>
               </div>
-              <BookingTable />
+              {/* <BookingTable /> */}
+              <AdminTable />
             </div>
           </div>
         </div>
@@ -114,18 +135,23 @@ const Admin = () => {
             fullWidth
             variant="standard"
           /> */}
-          <TextField
-            required
-            margin="dense"
-            id="outlined-required"
-            label="Email Address"
-            type="email"
-            fullWidth
-          />
+          <Box component="form" ref={form}>
+            <TextField
+              required
+              margin="dense"
+              id="outlined-required"
+              label="Email Address"
+              type="email"
+              name="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              fullWidth
+            />
+          </Box>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose}>Send</Button>
+          <Button onClick={handleSend}>Send</Button>
         </DialogActions>
       </Dialog>
 

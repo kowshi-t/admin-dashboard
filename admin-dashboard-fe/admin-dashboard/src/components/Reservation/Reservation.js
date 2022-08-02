@@ -1,10 +1,36 @@
 import { Box, Typography } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import BookingTable from "../../common/components/BookingTabe/BookingTable";
 import Button from "@mui/material/Button";
+import CssBaseline from "@mui/material/CssBaseline";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 import "../../common/common.css";
 
 const Reservation = () => {
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const [age, setAge] = React.useState("");
+
+  const handleChange = (event) => {
+    setAge(event.target.value);
+  };
+
   return (
     <>
       <div id="wrapper">
@@ -73,13 +99,43 @@ const Reservation = () => {
                 <h1 class="h3 mb-0 text-gray-800">Reservation</h1>
               </div>
               <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                <Button variant="contained">Add Reservation</Button>
+                <Button variant="contained" onClick={handleClickOpen}>
+                  Add Reservation
+                </Button>
               </div>
               <BookingTable />
             </div>
           </div>
         </div>
       </div>
+
+      <Dialog open={open} onClose={handleClose} sx={{ width: "300px" }}>
+        <CssBaseline />
+        <DialogTitle>Add Reservation</DialogTitle>
+        <DialogContent>
+          <DialogContentText></DialogContentText>
+          <Box component="form">
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Age</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={age}
+                label="Age"
+                onChange={handleChange}
+              >
+                <MenuItem value={10}>Ten</MenuItem>
+                <MenuItem value={20}>Twenty</MenuItem>
+                <MenuItem value={30}>Thirty</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleClose}>Send</Button>
+        </DialogActions>
+      </Dialog>
 
       <a className="scroll-to-top rounded" href="#page-top">
         <i className="fas fa-angle-up"></i>

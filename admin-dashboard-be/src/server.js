@@ -2,8 +2,11 @@ var express = require("express");
 var bodyParser = require("body-parser");
 require("dotenv").config();
 const cors = require("cors");
-// var dbConnection = require("./db/init");
-var router = require("./route");
+var dbConnection = require("./db/init");
+var routerUser = require("./route/userRoutes");
+var routerAuth = require("./route/auth");
+const { application } = require("express");
+const { notFound, errorHandler } = require("./middleware/errorMiddleware");
 
 var server = express();
 var runningPort = process.env.PORT || 3001;
@@ -20,8 +23,15 @@ server.use(function (req, res, next) {
   next();
 });
 
-server.use("/api", router);
-// dbConnection();
+// db connection
+dbConnection();
+server.use(express.json());
+
+// routes
+server.use("/api", routerUser);
+// server.use("/api/auth", routerAuth);
+server.use(notFound);
+server.use(errorHandler);
 
 server.listen(runningPort, function () {
   console.log("Server started on port:", runningPort);
