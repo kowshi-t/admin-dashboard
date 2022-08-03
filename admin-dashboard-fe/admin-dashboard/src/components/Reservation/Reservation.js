@@ -1,6 +1,5 @@
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import React, { useState, useEffect } from "react";
-import BookingTable from "../../common/components/BookingTabe/BookingTable";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import Dialog from "@mui/material/Dialog";
@@ -11,15 +10,20 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Autocomplete from "@mui/material/Autocomplete";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import axios from "axios";
 import "../../common/common.css";
+import ReservationTable from "../../common/components/Tables/ReservationTable";
 
 const Reservation = () => {
   const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(new Date());
+
+  const [cusName, setCusName] = useState();
+  const [service, setService] = useState();
+  const [status, setStatus] = useState("todo");
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -29,13 +33,26 @@ const Reservation = () => {
     setOpen(false);
   };
 
-  const [age, setAge] = React.useState("");
+  const handleReserve = async (e) => {
+    e.preventDefault();
 
-  const handleChange = (event) => {
-    setAge(event.target.value);
+    try {
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+        },
+      };
+
+      const url = "http://localhost:3001/api/reservation";
+      const { data } = await axios.post(
+        url,
+        { cusName, service, value, status },
+        config
+      );
+    } catch (error) {}
+
+    handleClose();
   };
-
-  const [value, setValue] = React.useState(new Date());
 
   const handleChangeDateTime = (newValue) => {
     setValue(newValue);
@@ -55,10 +72,9 @@ const Reservation = () => {
         },
       };
 
-      const url = "http://localhost:3001/api/getAllUsers";
+      const url = "http://localhost:3001/api/getReservations";
       const { data } = await axios.get(url, config);
       setTableData(data.data);
-      console.log(data.data);
     } catch (error) {}
   };
 
@@ -114,27 +130,27 @@ const Reservation = () => {
           </li>
         </ul>
 
-        <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content-wrapper" className="d-flex flex-column">
           <div id="content">
-            <nav class="navbar navbar-expand navbar-light bg-navbar topbar mb-4 static-top">
+            <nav className="navbar navbar-expand navbar-light bg-navbar topbar mb-4 static-top">
               <button
                 id="sidebarToggleTop"
-                class="btn btn-link rounded-circle mr-3"
+                className="btn btn-link rounded-circle mr-3"
               >
-                <i class="fa fa-bars"></i>
+                <i className="fa fa-bars"></i>
               </button>
             </nav>
 
-            <div class="container-fluid" id="container-wrapper">
-              <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                <h1 class="h3 mb-0 text-gray-800">Reservation</h1>
+            <div className="container-fluid" id="container-wrapper">
+              <div className="d-sm-flex align-items-center justify-content-between mb-4">
+                <h1 className="h3 mb-0 text-gray-800">Reservation</h1>
               </div>
-              <div class="d-sm-flex align-items-center justify-content-between mb-4">
+              <div className="d-sm-flex align-items-center justify-content-between mb-4">
                 <Button variant="contained" onClick={handleClickOpen}>
                   Add Reservation
                 </Button>
               </div>
-              <BookingTable />
+              <ReservationTable />
             </div>
           </div>
         </div>
@@ -150,11 +166,11 @@ const Reservation = () => {
           </DialogContentText>
           <br />
           <Box component="form">
-            <Stack spacing={2} fullWidth>
+            <Stack spacing={2}>
               <Autocomplete
-                id="customer-name"
-                Customer
-                Name
+                onChange={(event, value) => setCusName(value)}
+                id="customer"
+                name="cusName"
                 options={tableData.map(
                   (option) => option.firstName + " " + option.lastName
                 )}
@@ -163,8 +179,9 @@ const Reservation = () => {
                 )}
               />
               <Autocomplete
-                services
+                onChange={(event, value) => setService(value)}
                 id="services"
+                name="services"
                 options={services.map((option) => option.service)}
                 renderInput={(params) => (
                   <TextField {...params} label="Services" />
@@ -175,6 +192,7 @@ const Reservation = () => {
                 <Stack spacing={3}>
                   <DateTimePicker
                     label="Date&Time"
+                    name="value"
                     value={value}
                     onChange={handleChangeDateTime}
                     renderInput={(params) => <TextField {...params} />}
@@ -186,7 +204,7 @@ const Reservation = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose}>Reserve</Button>
+          <Button onClick={handleReserve}>Reserve</Button>
         </DialogActions>
       </Dialog>
 

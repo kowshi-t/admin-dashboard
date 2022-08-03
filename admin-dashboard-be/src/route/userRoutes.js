@@ -1,7 +1,6 @@
 const express = require("express");
 const adminController = require("../controller/adminController");
-const { users, validate } = require("../model/adminList");
-const bcrypt = require("bcrypt");
+const reservationController = require("../controller/reservationController");
 
 const router = express.Router();
 
@@ -26,7 +25,11 @@ router.post("/login", async function (req, res) {
 });
 
 router.post("/reservation", async function (req, res) {
-  await adminController.reservation(req, res);
+  await reservationController.reservation(req, res);
+});
+
+router.get("/getReservations", async function (req, res) {
+  await reservationController.getReservations(req, res);
 });
 
 module.exports = router;

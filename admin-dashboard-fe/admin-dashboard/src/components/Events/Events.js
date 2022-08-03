@@ -55,20 +55,20 @@ const Events = () => {
           </li>
         </ul>
 
-        <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content-wrapper" className="d-flex flex-column">
           <div id="content">
-            <nav class="navbar navbar-expand navbar-light bg-navbar topbar mb-4 static-top">
+            <nav className="navbar navbar-expand navbar-light bg-navbar topbar mb-4 static-top">
               <button
                 id="sidebarToggleTop"
-                class="btn btn-link rounded-circle mr-3"
+                className="btn btn-link rounded-circle mr-3"
               >
-                <i class="fa fa-bars"></i>
+                <i className="fa fa-bars"></i>
               </button>
             </nav>
 
-            <div class="container-fluid" id="container-wrapper">
-              <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                <h1 class="h3 mb-0 text-gray-800">Events</h1>
+            <div className="container-fluid" id="container-wrapper">
+              <div className="d-sm-flex align-items-center justify-content-between mb-4">
+                <h1 className="h3 mb-0 text-gray-800">Events</h1>
               </div>
               <EventCalendar />
             </div>

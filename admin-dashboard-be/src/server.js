@@ -4,8 +4,6 @@ require("dotenv").config();
 const cors = require("cors");
 var dbConnection = require("./db/init");
 var routerUser = require("./route/userRoutes");
-var routerAuth = require("./route/auth");
-const { application } = require("express");
 const { notFound, errorHandler } = require("./middleware/errorMiddleware");
 
 var server = express();
@@ -29,7 +27,6 @@ server.use(express.json());
 
 // routes
 server.use("/api", routerUser);
-// server.use("/api/auth", routerAuth);
 server.use(notFound);
 server.use(errorHandler);
 

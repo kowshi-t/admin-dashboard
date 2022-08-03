@@ -1,5 +1,4 @@
 const adminModel = require("../model/adminList");
-const reservationModel = require("../model/reservation");
 
 module.exports.get = async function (req, res) {
   console.log("GET IS WORKING");
@@ -100,39 +99,6 @@ module.exports.getAdminClient = async function (req, res) {
     res.send({
       success: false,
       data: [],
-    });
-  }
-};
-
-module.exports.reservation = async function (req, res) {
-  const { name, service, datetime } = req.body;
-
-  try {
-    const resp = await reservationModel.create({
-      name,
-      service,
-      datetime,
-    });
-
-    if (resp) {
-      res.status(201);
-      res.send({
-        success: true,
-        data: resp,
-      });
-    } else {
-      res.status(400);
-      // res.send({
-      //   success: false,
-      //   message: "Error occurred!",
-      // });
-      throw new Error("Error occurred!");
-    }
-  } catch (e) {
-    console.log("Error ----------- ", e);
-    res.send({
-      success: false,
-      error: e,
     });
   }
 };
