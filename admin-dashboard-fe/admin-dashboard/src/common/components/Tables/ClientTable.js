@@ -36,14 +36,11 @@ const columns = [
   },
 ];
 
-const AdminTable = () => {
+const ClientTable = () => {
   const [tableData, setTableData] = useState([]);
 
   useEffect(() => {
     fetchData();
-    // fetch("http://localhost:3001/api/getAllUsers")
-    //   .then((data) => data.json())
-    //   .then((data) => console.log(data));
   }, []);
 
   const fetchData = async (e) => {
@@ -54,11 +51,11 @@ const AdminTable = () => {
         },
       };
 
-      const url = "http://localhost:3001/api/getAdminClient/admin";
+      const url = "http://localhost:3001/api/getAdminClient/client";
       const { data } = await axios.get(url, config);
 
       setTableData(data.data);
-      console.log(data.data.role);
+      console.log(data.data);
     } catch (error) {}
   };
 
@@ -77,4 +74,4 @@ const AdminTable = () => {
   );
 };
 
-export default AdminTable;
+export default ClientTable;

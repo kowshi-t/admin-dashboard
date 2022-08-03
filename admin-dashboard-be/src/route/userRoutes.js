@@ -13,12 +13,20 @@ router.get("/getAllUsers", async function (req, res) {
   await adminController.getAllUsers(req, res);
 });
 
+router.get("/getAdminClient/:role", async function (req, res) {
+  await adminController.getAdminClient(req, res);
+});
+
 router.post("/users", async function (req, res) {
   await adminController.register(req, res);
 });
 
 router.post("/login", async function (req, res) {
   await adminController.authUser(req, res);
+});
+
+router.post("/reservation", async function (req, res) {
+  await adminController.reservation(req, res);
 });
 
 module.exports = router;
