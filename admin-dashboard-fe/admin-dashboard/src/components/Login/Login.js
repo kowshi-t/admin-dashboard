@@ -9,6 +9,8 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { Navigate, useNavigate } from "react-router-dom";
 import axios from "axios";
+import Link from "@mui/material/Link";
+import Grid from "@mui/material/Grid";
 import "./Login.css";
 
 function Login() {
@@ -117,18 +119,13 @@ function Login() {
             >
               Sign In
             </Button>
-            {/* <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
+            <Grid container>
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link href="/signup" variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>
-            </Grid> */}
+            </Grid>
           </Box>
         </Box>
       </Container>

@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import BookingTable from "../../common/components/BookingTabe/BookingTable";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -8,10 +8,14 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
+import Autocomplete from "@mui/material/Autocomplete";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { TimePicker } from "@mui/x-date-pickers/TimePicker";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import Stack from "@mui/material/Stack";
+import TextField from "@mui/material/TextField";
+import axios from "axios";
 import "../../common/common.css";
 
 const Reservation = () => {
@@ -29,6 +33,33 @@ const Reservation = () => {
 
   const handleChange = (event) => {
     setAge(event.target.value);
+  };
+
+  const [value, setValue] = React.useState(new Date());
+
+  const handleChangeDateTime = (newValue) => {
+    setValue(newValue);
+  };
+
+  const [tableData, setTableData] = useState([]);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async (e) => {
+    try {
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+        },
+      };
+
+      const url = "http://localhost:3001/api/getAllUsers";
+      const { data } = await axios.get(url, config);
+      setTableData(data.data);
+      console.log(data.data);
+    } catch (error) {}
   };
 
   return (
@@ -109,31 +140,53 @@ const Reservation = () => {
         </div>
       </div>
 
-      <Dialog open={open} onClose={handleClose} sx={{ width: "300px" }}>
+      <Dialog open={open} onClose={handleClose} maxWidth="sm">
         <CssBaseline />
         <DialogTitle>Add Reservation</DialogTitle>
         <DialogContent>
-          <DialogContentText></DialogContentText>
+          <DialogContentText>
+            To add a new reservation, please fill the below details and submit
+            them.
+          </DialogContentText>
+          <br />
           <Box component="form">
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Age</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={age}
-                label="Age"
-                onChange={handleChange}
-              >
-                <MenuItem value={10}>Ten</MenuItem>
-                <MenuItem value={20}>Twenty</MenuItem>
-                <MenuItem value={30}>Thirty</MenuItem>
-              </Select>
-            </FormControl>
+            <Stack spacing={2} fullWidth>
+              <Autocomplete
+                id="customer-name"
+                Customer
+                Name
+                options={tableData.map(
+                  (option) => option.firstName + " " + option.lastName
+                )}
+                renderInput={(params) => (
+                  <TextField {...params} label="Customer Name" />
+                )}
+              />
+              <Autocomplete
+                services
+                id="services"
+                options={services.map((option) => option.service)}
+                renderInput={(params) => (
+                  <TextField {...params} label="Services" />
+                )}
+              />
+
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <Stack spacing={3}>
+                  <DateTimePicker
+                    label="Date&Time"
+                    value={value}
+                    onChange={handleChangeDateTime}
+                    renderInput={(params) => <TextField {...params} />}
+                  />
+                </Stack>
+              </LocalizationProvider>
+            </Stack>
           </Box>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose}>Send</Button>
+          <Button onClick={handleClose}>Reserve</Button>
         </DialogActions>
       </Dialog>
 
@@ -143,5 +196,12 @@ const Reservation = () => {
     </>
   );
 };
+
+const services = [
+  { service: "Haircut/styling" },
+  { service: "Nail care" },
+  { service: "Facials / skin care" },
+  { service: "Massage" },
+];
 
 export default Reservation;

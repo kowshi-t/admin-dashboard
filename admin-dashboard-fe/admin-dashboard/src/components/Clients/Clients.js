@@ -1,9 +1,12 @@
 import React from "react";
 import BookingTable from "../../common/components/BookingTabe/BookingTable";
 import Button from "@mui/material/Button";
+import { useNavigate } from "react-router-dom";
 import "../../common/common.css";
 
 const Clients = () => {
+  const navigate = useNavigate();
+
   return (
     <>
       <div id="wrapper">
@@ -72,7 +75,9 @@ const Clients = () => {
                 <h1 class="h3 mb-0 text-gray-800">Clients</h1>
               </div>
               <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                <Button variant="contained">Add Client</Button>
+                <Button variant="contained" onClick={() => navigate("/signup")}>
+                  Add Client
+                </Button>
               </div>
               <BookingTable />
             </div>
