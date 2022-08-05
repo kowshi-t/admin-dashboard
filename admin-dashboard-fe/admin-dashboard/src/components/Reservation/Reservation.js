@@ -72,7 +72,7 @@ const Reservation = () => {
         },
       };
 
-      const url = "http://localhost:3001/api/getReservations";
+      const url = "http://localhost:3001/api/getAdminClient/client";
       const { data } = await axios.get(url, config);
       setTableData(data.data);
     } catch (error) {}
